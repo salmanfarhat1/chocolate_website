@@ -6,8 +6,8 @@ import (
 
 	"database/sql"
 
-	"github.com/salmanfarhat1/moldChocolateBackend/db"
-	"github.com/salmanfarhat1/moldChocolateBackend/models"
+	"github.com/salmanfarhat1/chocolate_website/tree/main/backend/db"
+	"github.com/salmanfarhat1/chocolate_website/tree/main/backend/models"
 )
 
 func GetVariantsHandler(dbConn *sql.DB) http.HandlerFunc {

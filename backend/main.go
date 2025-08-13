@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/salmanfarhat1/moldChocolateBackend/api"
-	"github.com/salmanfarhat1/moldChocolateBackend/db"
+	"github.com/salmanfarhat1/chocolate_website/tree/main/backend/api"
+	"github.com/salmanfarhat1/chocolate_website/tree/main/backend/db"
 )
 
 func main() {

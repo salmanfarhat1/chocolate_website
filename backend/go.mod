@@ -1,4 +1,4 @@
-module github.com/salmanfarhat1/moldChocolateBackend
+module github.com/salmanfarhat1/chocolate_website/tree/main/backend
 
 go 1.24.4
 
