@@ -17,7 +17,7 @@ export default async function ChocolatesPage() {
   const chocolates = await getChocolates();
 
   // Base URL for photos on your backend
-  const basePhotoUrl = "http://localhost:30718//";
+  const basePhotoUrl = "http://localhost:30718/";
 
   return (
     <main className="min-h-screen bg-[#fdfaf5] p-8">
