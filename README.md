@@ -11,8 +11,11 @@ docker build -t ghcr.io/salmanfarhat1/backend:1.0 ./backend
 docker build -t ghcr.io/salmanfarhat1/frontend:1.0 ./frontend
 
 # Push Images to GHCR
+
 docker push ghcr.io/salmanfarhat1/backend:1.0
 docker push ghcr.io/salmanfarhat1/frontend:1.0
+
+
 Kubernetes Setup for Private GHCR Images
 3. Create Docker Registry Secret
 Allows Kubernetes to pull private images from GHCR:
@@ -28,8 +31,11 @@ Apply the Kubernetes configuration (stack.yaml):
 
 bash
 kubectl apply -f stack.yaml
+
+5. Forward application to localhost  
+
 Import PostgreSQL Dump File
-5. Copy and Restore SQL Dump
+6. Copy and Restore SQL Dump
 bash
 # Copy dump file into PostgreSQL pod
 kubectl cp dump.sql postgres-deploy-758bc54d8d-cpjj5:/tmp/dumpfile.sql

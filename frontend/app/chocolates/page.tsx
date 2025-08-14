@@ -8,7 +8,7 @@ type Chocolate = {
 };
 
 async function getChocolates(): Promise<Chocolate[]> {
-  const res = await fetch("http://backend:3000/chocolates", { cache: "no-store" });
+  const res = await fetch("http://backend-svc:3000/chocolates", { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to fetch chocolates");
   return res.json();
 }
@@ -17,7 +17,7 @@ export default async function ChocolatesPage() {
   const chocolates = await getChocolates();
 
   // Base URL for photos on your backend
-  const basePhotoUrl = "http://localhost:3000/";
+  const basePhotoUrl = "http://localhost:30718//";
 
   return (
     <main className="min-h-screen bg-[#fdfaf5] p-8">
