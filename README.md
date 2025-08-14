@@ -1,7 +1,7 @@
 GitHub Container Registry (GHCR) Login & Docker Image Push
 1. Login to GHCR in Terminal
 bash
-echo "REMOVED" | docker login ghcr.io -u salmanfarhat1 --password-stdin
+echo "token" | docker login ghcr.io -u salmanfarhat1 --password-stdin
 2. Build and Push Docker Images
 bash
 # Build Backend Image
@@ -24,7 +24,7 @@ bash
 kubectl create secret docker-registry ghcr-secret \
   --docker-server=ghcr.io \
   --docker-username=salmanfarhat1 \
-  --docker-password=REMOVED \
+  --docker-password=token \
   --docker-email=salmanfarhat098@gmail.com
 4. Deploy Stack
 Apply the Kubernetes configuration (stack.yaml):
