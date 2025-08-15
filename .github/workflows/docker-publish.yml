@@ -1,0 +1,40 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_OWNER: salmanfarhat1 # Your GitHub username
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build and push BACKEND
+      - name: Build backend image
+        run: |
+          docker build -t $REGISTRY/${{ env.IMAGE_OWNER }}/backend:latest -f backend/Dockerfile .
+          docker push $REGISTRY/${{ env.IMAGE_OWNER }}/backend:latest
+
+      # Build and push FRONTEND
+      - name: Build frontend image
+        run: |
+          docker build -t $REGISTRY/${{ env.IMAGE_OWNER }}/frontend:latest -f frontend/Dockerfile .
+          docker push $REGISTRY/${{ env.IMAGE_OWNER }}/frontend:latest
