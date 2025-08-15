@@ -10,7 +10,7 @@ docker build -t ghcr.io/salmanfarhat1/backend:1.0 ./backend
 # Build Frontend Image
 docker build -t ghcr.io/salmanfarhat1/frontend:1.0 ./frontend
 
-# Push Images to GHCR
+# Push Images to GHCR    
 
 docker push ghcr.io/salmanfarhat1/backend:1.0
 docker push ghcr.io/salmanfarhat1/frontend:1.0
