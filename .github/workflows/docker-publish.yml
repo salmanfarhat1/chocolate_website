@@ -10,7 +10,7 @@ env:
   IMAGE_OWNER: salmanfarhat1 # Your GitHub username
   BACKEND_IMAGE: backend
   FRONTEND_IMAGE: frontend
-  VERSION: 1.0 # You can also make this dynamic
+  VERSION: latest # You can also make this dynamic
 
 jobs:
   build-and-push:
