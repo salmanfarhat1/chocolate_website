@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link"; // add this at the top
 
 type Chocolate = {
   id: number;
@@ -32,10 +33,8 @@ export default async function ChocolatesPage() {
               : null;
 
           return (
-            <div
-              key={chocolate.id}
-              className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center"
-            >
+            <Link href={`/chocolates/${chocolate.id}`} key={chocolate.id}>
+            <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center hover:scale-105 transition-transform cursor-pointer">
               {firstPhotoUrl ? (
                 <img
                   src={firstPhotoUrl}
@@ -52,6 +51,7 @@ export default async function ChocolatesPage() {
               <h2 className="text-2xl font-semibold text-[#5a2a27] mb-2">{chocolate.name}</h2>
               <p className="text-[#7a5a53] text-center">{chocolate.ingredients}</p>
             </div>
+          </Link>
           );
         })}
       </div>

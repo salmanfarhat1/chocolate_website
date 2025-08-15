@@ -45,3 +45,8 @@ kubectl exec -it postgres-deploy-758bc54d8d-cpjj5 -- /bin/bash
 
 # Restore the dump (inside the pod)
 psql -U chocolate_admin -d chocolate_db -f /tmp/dumpfile.sql   
+
+
+# Redeploy docker image in the kubernetes pods
+kubectl rollout restart deployment backend-deploy
+kubectl rollout restart deployment frontend-deploy
