@@ -44,4 +44,4 @@ kubectl cp dump.sql postgres-deploy-758bc54d8d-cpjj5:/tmp/dumpfile.sql
 kubectl exec -it postgres-deploy-758bc54d8d-cpjj5 -- /bin/bash
 
 # Restore the dump (inside the pod)
-psql -U chocolate_admin -d chocolate_db -f /tmp/dumpfile.sql
+psql -U chocolate_admin -d chocolate_db -f /tmp/dumpfile.sql   
