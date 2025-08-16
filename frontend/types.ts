@@ -1,14 +1,14 @@
 export type Chocolate = {
-    ID: number;
-    Name: string;
-    Ingredients: string;
-    PhotoUrls: string[];
-  };
-  
-  export type Variants = {
-    ID: number;
-    ChocolateID: number;
-    Size: string;
-    Weight: number;
-    Price: number;
-  };
+  id: number;
+  name: string;
+  ingredients: string;
+  photo_urls: string[];
+};
+
+export type Variants = {
+  id: number;
+  chocolate_id: number;
+  size: string;
+  weight: number;
+  price: number;
+};
