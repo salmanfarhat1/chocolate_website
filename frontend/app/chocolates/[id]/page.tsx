@@ -7,6 +7,10 @@ async function getChocolate(id: string): Promise<Chocolate> {
   const res = await fetch("http://backend-svc:3000/chocolates", { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to fetch chocolates");
 
+
+
+
+  
   const chocolates: Chocolate[] = await res.json();
   const chocolate = chocolates.find((c) => c.id === Number(id));
   if (!chocolate) throw new Error("Chocolate not found");
