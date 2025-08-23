@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - salman
 
 env:
   REGISTRY: ghcr.io
