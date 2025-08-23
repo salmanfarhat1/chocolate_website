@@ -56,14 +56,23 @@ export default async function ChocolatePage({ params }: Params) {
           </tr>
         </thead>
         <tbody>
-          {variants.map((v) => (
-            <tr key={v.id}>
-              <td className="border p-2 text-center">{v.size}</td>
-              <td className="border p-2 text-center">{v.weight}</td>
-              <td className="border p-2 text-center">{v.price}</td>
+          {variants && variants.length > 0 ? (
+            variants.map((v) => (
+              <tr key={v.id}>
+                <td className="border p-2 text-center">{v.size}</td>
+                <td className="border p-2 text-center">{v.weight}</td>
+                <td className="border p-2 text-center">{v.price}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={3} className="border p-2 text-center text-gray-500">
+                No variants available
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
+
       </table>
     </main>
   );
