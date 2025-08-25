@@ -50,3 +50,7 @@ psql -U chocolate_admin -d chocolate_db -f /tmp/dumpfile.sql
 # Redeploy docker image in the kubernetes pods
 kubectl rollout restart deployment backend-deploy
 kubectl rollout restart deployment frontend-deploy
+
+
+# Connect to a pod 
+kubectl exec -it pod-name --  bash
