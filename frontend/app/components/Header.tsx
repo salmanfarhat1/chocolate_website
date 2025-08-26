@@ -15,22 +15,20 @@ export default function Header() {
         {/* Nav Links */}
         <nav className="flex items-center space-x-6">
           <Link href="#" className="text-[#5a2a27] hover:text-[#a35a53]">
-            E-SHOP
+            Home
           </Link>
           <Link href="#" className="text-[#5a2a27] hover:text-[#a35a53]">
-            RESTAURANTS
+            E-Shop
           </Link>
-          <Link href="#" className="text-[#5a2a27] hover:text-[#a35a53]">
-            COCKTAIL & RECEPTION
-          </Link>
+          
         </nav>
 
         {/* Icons */}
         <div className="flex items-center space-x-4">
-          <Image src="../icons/search.svg" alt="Search" width={24} height={24} />
-          <Image src="../icons/cart.svg" alt="Cart" width={24} height={24} />
+          <Image src="/icons/search.svg" alt="Search" width={24} height={24} />
+          <Image src="/icons/cart.svg" alt="Cart" width={24} height={24} />
           <Link href="/signin">
-            <Image src="../icons/user.svg" alt="Sign In" width={24} height={24} />
+            <Image src="/icons/user.svg" alt="Sign In" width={24} height={24} />
           </Link>
         </div>
       </div>
