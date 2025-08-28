@@ -36,12 +36,12 @@ export default function Header() {
         <div className="bg-white">
           <div className="flex items-center justify-center py-3 space-x-2">
             {/* Logo */}
-            <Image src="/icons/logo-2.png" alt="Molded Logo" width={100} height={30} />
+            <Image src="/icons/logo-2.png" alt="Molded Logo" width={250} height={100} />
           </div>
         </div>
 
         {/* Background section */}
-        <div className="relative w-full h-36">
+        <div className="relative w-full h-[9cm]">
           <Image
             src="/chocolate_background.jpg"
             alt="Background"
