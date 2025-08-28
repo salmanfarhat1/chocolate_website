@@ -30,9 +30,9 @@ export default async function ChocolatesPage() {
       <Header /> {/* ✅ Reusable header here */}
 
       <main className="p-8">
-        <h1 className="text-4xl font-bold text-[#5a2a27] mb-10 text-center">
+        {/* <h1 className="text-4xl font-bold text-[#5a2a27] mb-10 text-center">
           Our Chocolates
-        </h1>
+        </h1> */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {chocolates.length === 0 ? (
             <p className="text-center text-[#7a5a53] col-span-full">Out of stock.</p>
