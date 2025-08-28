@@ -6,8 +6,8 @@ import Link from "next/link";
 export default function Header() {
   return (
     <header>
-      {/* 🔹 Top nav bar */}
-      <div className="bg-[#fdfaf5] shadow-sm">
+      {/* 🔹 Top nav bar (fixed) */}
+      <div className="bg-[#fdfaf5] shadow-sm fixed top-0 left-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
           {/* Nav Links (left) */}
           <nav className="flex items-center space-x-6">
@@ -30,39 +30,34 @@ export default function Header() {
         </div>
       </div>
 
-      {/* 🔹 Centered Logo section */}
+      {/* 🔹 Add margin so content doesn’t hide under fixed nav */}
+      <div className="pt-12">
+        {/* Centered Logo section */}
         <div className="bg-white">
-            <div className="flex items-center justify-center py-3 space-x-2">
+          <div className="flex items-center justify-center py-3 space-x-2">
             {/* Logo */}
-                <Image src="/icons/logo.svg" alt="Molded Logo" width={70} height={30} />
-
-                {/* Wordmark beside logo */}
-                <span className="text-2xl font-serif italic text-[#5a2a27] tracking-wide">
-                moulé
-                </span>
-            </div>
+            <Image src="/icons/logo-2.png" alt="Molded Logo" width={100} height={30} />
+          </div>
         </div>
 
+        {/* Background section */}
+        <div className="relative w-full h-36">
+          <Image
+            src="/chocolate_background.jpg"
+            alt="Background"
+            fill
+            className="object-cover"
+          />
 
-      {/* 🔹 Hero strip with background */}
-      <div className="relative h-[220px]">
-        {/* Background image */}
-        <Image
-          src="/chocolate_background.jpg"
-          alt="Chocolate Background"
-          fill
-          className="object-cover"
-        />
-
-        {/* Overlay block */}
-        <div className="absolute inset-0 flex items-center justify-center">
-            <div className="bg-white/70 px-8 py-6 rounded-lg shadow-md border border-[#5a2a27]">
-                <h2 className="text-2xl md:text-3xl font-semibold text-[#5a2a27] text-center">
+          {/* Overlay block on the left */}
+          <div className="absolute top-1/2 left-8 -translate-y-1/2">
+            <div className="bg-white/70 px-6 py-4 rounded-lg shadow-md border border-[#5a2a27] max-w-sm">
+              <h2 className="text-lg md:text-xl font-semibold text-[#5a2a27]">
                 Artisanal Chocolate with Lebanese Flavours
-                </h2>
+              </h2>
             </div>
+          </div>
         </div>
-
       </div>
     </header>
   );
