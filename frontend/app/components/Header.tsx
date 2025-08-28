@@ -31,19 +31,18 @@ export default function Header() {
       </div>
 
       {/* 🔹 Centered Logo section */}
-      <div className="bg-white">
-        <div className="flex flex-col items-center py-3">
-          <Image src="/icons/logo.svg" alt="Molded Logo" width={70} height={30} />
-          <div className="flex items-center space-x-3 mt-2">
-            <span className="text-3xl font-serif italic text-[#5a2a27] tracking-wide">
-              moulé
-            </span>
-            <span className="text-2xl font-arabic text-[#5a2a27]">
-              موليه
-            </span>
-          </div>
+        <div className="bg-white">
+            <div className="flex items-center justify-center py-3 space-x-2">
+            {/* Logo */}
+                <Image src="/icons/logo.svg" alt="Molded Logo" width={70} height={30} />
+
+                {/* Wordmark beside logo */}
+                <span className="text-2xl font-serif italic text-[#5a2a27] tracking-wide">
+                moulé
+                </span>
+            </div>
         </div>
-      </div>
+
 
       {/* 🔹 Hero strip with background */}
       <div className="relative h-[220px]">
@@ -57,12 +56,13 @@ export default function Header() {
 
         {/* Overlay block */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="bg-white/70 px-6 py-3 rounded-lg shadow-md">
-            <h2 className="text-xl md:text-2xl font-semibold text-[#5a2a27] text-center">
-              Artisanal Chocolate with Lebanese Flavours
-            </h2>
-          </div>
+            <div className="bg-white/70 px-8 py-6 rounded-lg shadow-md border border-[#5a2a27]">
+                <h2 className="text-2xl md:text-3xl font-semibold text-[#5a2a27] text-center">
+                Artisanal Chocolate with Lebanese Flavours
+                </h2>
+            </div>
         </div>
+
       </div>
     </header>
   );
