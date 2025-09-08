@@ -53,7 +53,7 @@ export default function Header() {
           <div className="absolute top-1/2 left-8 -translate-y-1/2">
             <div className="bg-white/70 px-6 py-4 rounded-lg shadow-md border border-[#5a2a27] max-w-sm">
               <h2 className="text-lg md:text-xl font-semibold text-[#5a2a27]">
-                Artisanal Chocolate with Lebanese Flavours
+                Artisanal Chocolate with 5ara Flavours
               </h2>
             </div>
           </div>
