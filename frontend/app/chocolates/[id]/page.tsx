@@ -3,7 +3,7 @@ import { Chocolate, Variants } from "@/types";
 type Params = { params: { id: string } };
 
 async function getChocolate(id: string): Promise<Chocolate> {
-  const res = await fetch("http://backend-svc:3000/chocolates", { cache: "no-store" });
+  const res = await fetch("http://localhost:3000/chocolates", { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to fetch chocolates");
 
   const chocolates: Chocolate[] = await res.json();
@@ -15,7 +15,7 @@ async function getChocolate(id: string): Promise<Chocolate> {
 
 async function getVariants(chocolateId: string): Promise<Variants[]> {
   const res = await fetch(
-    `http://backend-svc:3000/chocolates/${chocolateId}/variants`,
+    `http://localhost:3000/chocolates/${chocolateId}/variants`,
     { cache: "no-store" }
   );
   if (!res.ok) throw new Error("Failed to fetch variants");

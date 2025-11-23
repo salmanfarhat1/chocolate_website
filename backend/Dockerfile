@@ -9,6 +9,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -buildvcs=false -o main .
 FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/main .
-COPY photos ./photos  
+COPY photos ./photos 
+COPY admin ./admin  
 EXPOSE 3000
 CMD ["./main"]
+
+
