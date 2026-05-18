@@ -1,79 +1,147 @@
-import { Chocolate, Variants } from "@/types";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import VariantSelector from "../../components/VariantSelector";
 
-type Params = { params: { id: string } };
+const API = "http://localhost:3000";
 
-async function getChocolate(id: string): Promise<Chocolate> {
-  const res = await fetch("http://localhost:3000/chocolates", { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to fetch chocolates");
+type Chocolate = {
+  id: number;
+  name: string;
+  ingredients: string;
+  photo_urls: string[];
+};
 
-  const chocolates: Chocolate[] = await res.json();
-  const chocolate = chocolates.find((c) => c.id === Number(id));
-  if (!chocolate) throw new Error("Chocolate not found");
+type Variant = {
+  id: number;
+  chocolate_id: number;
+  size: string;
+  weight: number | null;
+  price: number;
+};
 
-  return chocolate;
+async function getChocolate(id: string): Promise<Chocolate | null> {
+  try {
+    const res = await fetch(`${API}/chocolates`, { cache: "no-store" });
+    const all: Chocolate[] = await res.json();
+    return all.find(c => String(c.id) === id) ?? null;
+  } catch { return null; }
 }
 
-async function getVariants(chocolateId: string): Promise<Variants[]> {
-  const res = await fetch(
-    `http://localhost:3000/chocolates/${chocolateId}/variants`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) throw new Error("Failed to fetch variants");
-  return res.json();
+async function getVariants(id: string): Promise<Variant[]> {
+  try {
+    const res = await fetch(`${API}/chocolates/${id}/variants`, { cache: "no-store" });
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch { return []; }
 }
 
-export default async function ChocolatePage({ params }: Params) {
-  const chocolate = await getChocolate(params.id);
-  const variants = await getVariants(params.id);
+export default async function ChocolateDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const [chocolate, variants] = await Promise.all([
+    getChocolate(params.id),
+    getVariants(params.id),
+  ]);
 
-  const basePhotoUrl = "http://localhost:30718/";
+  if (!chocolate) {
+    return (
+      <div className="min-h-screen bg-[#fdfaf5]">
+        <Header />
+        <div className="flex flex-col items-center justify-center py-32">
+          <div className="text-6xl mb-4">🍫</div>
+          <h1 className="text-2xl font-semibold text-[#5a2a27] mb-2">Product not found</h1>
+          <a href="/chocolates" className="text-[#8b7355] underline mt-4">← Back to collection</a>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const photos = chocolate.photo_urls || [];
 
   return (
-    <main className="min-h-screen bg-[#fdfaf5] p-8 flex flex-col items-center">
-      <h1 className="text-4xl font-bold text-[#5a2a27] mb-6">{chocolate.name}</h1>
+    <div className="min-h-screen bg-[#fdfaf5]">
+      <Header />
 
-      {/* Panoramic photo viewer */}
-      <div className="w-full max-w-4xl h-72 mb-6 overflow-x-auto flex space-x-4 snap-x snap-mandatory">
-        {chocolate.photo_urls.map((photo, idx) => (
-          <img
-            key={idx}
-            src={basePhotoUrl + photo.replace(/^\/+/, "")}
-            alt={chocolate.name}
-            className="rounded-2xl object-cover w-full h-72 flex-shrink-0 snap-center"
-          />
-        ))}
-      </div>
+      <main className="max-w-6xl mx-auto px-6 py-12">
 
-      <p className="text-[#7a5a53] text-center mb-6">{chocolate.ingredients}</p>
+        {/* Breadcrumb */}
+        <div className="text-sm text-[#8b7355] mb-8">
+          <a href="/" className="hover:text-[#5a2a27]">Home</a>
+          <span className="mx-2">›</span>
+          <a href="/chocolates" className="hover:text-[#5a2a27]">Collection</a>
+          <span className="mx-2">›</span>
+          <span className="text-[#5a2a27]">{chocolate.name}</span>
+        </div>
 
-      {/* Variants */}
-      <table className="w-full max-w-md border-collapse">
-        <thead>
-          <tr>
-            <th className="border p-2">Size</th>
-            <th className="border p-2">Weight (g)</th>
-            <th className="border p-2">Price ($)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {variants && variants.length > 0 ? (
-            variants.map((v) => (
-              <tr key={v.id}>
-                <td className="border p-2 text-center">{v.size}</td>
-                <td className="border p-2 text-center">{v.weight}</td>
-                <td className="border p-2 text-center">{v.price}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={3} className="border p-2 text-center text-gray-500">
-                No variants available
-              </td>
-            </tr>
-          )}
-        </tbody>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
-      </table>
-    </main>
+          {/* Photo gallery */}
+          <div>
+            <div className="rounded-2xl overflow-hidden bg-[#f0e6d6] aspect-square">
+              {photos[0] ? (
+                <img
+                  src={`${API}${photos[0]}`}
+                  alt={chocolate.name}
+                  className="w-full h-full object-cover"
+                  id="main-photo"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-7xl">🍫</div>
+              )}
+            </div>
+
+            {/* Thumbnails */}
+            {photos.length > 1 && (
+              <div className="flex gap-3 mt-4 flex-wrap">
+                {photos.map((p, i) => (
+                  <img
+                    key={i}
+                    src={`${API}${p}`}
+                    alt={`photo ${i + 1}`}
+                    className="w-20 h-20 object-cover rounded-lg border-2 border-transparent hover:border-[#5a2a27] cursor-pointer transition-all"
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Info + variants */}
+          <div>
+            <div className="text-sm font-medium text-[#8b7355] uppercase tracking-widest mb-2">
+              Artisanal · Handcrafted
+            </div>
+            <h1 className="text-4xl font-light text-[#5a2a27] mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+              {chocolate.name}
+            </h1>
+
+            {chocolate.ingredients && (
+              <div className="mb-8">
+                <div className="text-xs uppercase tracking-widest text-[#8b7355] mb-2">Ingredients</div>
+                <p className="text-[#7a5a53] leading-relaxed">{chocolate.ingredients}</p>
+              </div>
+            )}
+
+            <div className="border-t border-[#f0e6d6] pt-8">
+              <div className="text-xs uppercase tracking-widest text-[#8b7355] mb-4">
+                {variants.length ? 'Choose your size' : 'Availability'}
+              </div>
+
+              {/* Client component handles selection + add to cart */}
+              <VariantSelector
+                chocolateId={chocolate.id}
+                chocolateName={chocolate.name}
+                photoUrl={photos[0] ? `${API}${photos[0]}` : undefined}
+                variants={variants}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

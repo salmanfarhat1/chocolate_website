@@ -10,10 +10,12 @@ type Chocolate = {
   ingredients: string;
   photo_urls: string[];
 };
+const backendAPIURI = "http://localhost:3000/"; 
+const basePhotoUrl  = "http://localhost:3000/" 
 
 async function getChocolates(): Promise<Chocolate[]> {
   try {
-    const res = await fetch("http://localhost:3000/chocolates", { cache: "no-store" });
+    const res = await fetch (backendAPIURI + "chocolates", { cache: "no-store" });
     if (!res.ok) throw new Error("Failed to fetch chocolates");
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -25,7 +27,6 @@ async function getChocolates(): Promise<Chocolate[]> {
 
 export default async function ChocolatesPage() {
   const chocolates = await getChocolates() ?? [];
-  const basePhotoUrl = "http://localhost:30718/";
 
   return (
     <div className="min-h-screen bg-[#fdfaf5]">
@@ -43,7 +44,7 @@ export default async function ChocolatesPage() {
             chocolates={chocolates}
             basePhotoUrl={basePhotoUrl}
             showAddToCart={true}
-            isClickable={false}
+            isClickable={true}
           />
         </div>
 

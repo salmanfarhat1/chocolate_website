@@ -34,6 +34,21 @@ func GetChocolates(db *sql.DB) ([]models.Chocolate, error) {
 	return chocolates, nil
 }
 
+func UpdateChocolate(db *sql.DB, id int, choc *models.Chocolate) error {
+	query := `
+        UPDATE chocolates
+        SET name = $1, ingredients = $2, photo_urls = $3
+        WHERE id = $4
+    `
+	_, err := db.Exec(query,
+		choc.Name,
+		choc.Ingredients,
+		pq.Array(choc.PhotoUrls),
+		id,
+	)
+	return err
+}
+
 func InsertChocolate(db *sql.DB, choc *models.Chocolate) error {
 	query := `INSERT INTO chocolates (name, ingredients, photo_urls) VALUES ($1, $2, $3) RETURNING id`
 	return db.QueryRow(

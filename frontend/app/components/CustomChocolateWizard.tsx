@@ -3,31 +3,81 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 
+import '../../css/CustomChocolateCreator.css';
+
 type ChocolateBase = {
   id: string;
   name: string;
   description: string;
   price: number;
+  swatchClass: string;
+  detailDesc: string;
 };
 
 type Ingredient = {
   id: string;
   name: string;
-  image: string;
+  emoji: string;
   price: number;
 };
 
 const chocolateBases: ChocolateBase[] = [
-  { id: 'dark', name: 'Dark Chocolate', description: '70% Cacao', price: 8 },
-  { id: 'milk', name: 'Milk Chocolate', description: 'Belgian Milk', price: 7 },
-  { id: 'white', name: 'White Chocolate', description: 'Premium Vanilla', price: 9 },
+  {
+    id: 'dark',
+    name: 'Dark Chocolate',
+    description: '70% Cocoa',
+    detailDesc: 'Intense & bittersweet',
+    price: 6,
+    swatchClass: 'swatch-dark',
+  },
+  
+  {
+    id: 'milk',
+    name: 'Milk Chocolate',
+    description: '33% Cocoa',
+    detailDesc: 'Smooth & creamy',
+    price: 5,
+    swatchClass: 'swatch-milk',
+  },
+
+  {
+    id: 'white',
+    name: 'White Chocolate',
+    description: 'Cocoa Butter',
+    detailDesc: 'Buttery & sweet',
+    price: 6,
+    swatchClass: 'swatch-white',
+  },
+
+  {
+    id: 'ruby',
+    name: 'Ruby Chocolate',
+    description: 'Naturally pink chocolate ',
+    detailDesc: 'made from ruby cocoa beans',
+    price: 6,
+    swatchClass: 'swatch-pink',
+  }
 ];
 
 const ingredients: Ingredient[] = [
-  { id: 'banana', name: 'Banana', image: '/icons/banana.png', price: 2 },
-  { id: 'fraise', name: 'Strawberry', image: '/icons/fraise.png', price: 3 },
-  { id: 'hazelnut', name: 'Hazelnut', image: '/icons/hazelnut.png', price: 4 },
+  { id: 'banana',        name: 'Banana',             emoji: '🍌✨', price: 2 },
+  { id: 'strawberry',    name: 'Strawberry',         emoji: '🍓❤️', price: 3 },
+  { id: 'hazelnut',      name: 'Hazelnut',           emoji: '🌰🤎', price: 4 },
+  { id: 'pistachio',     name: 'Pistachio',          emoji: '🟢🥜', price: 4 },
+  { id: 'almond',        name: 'Almond',              emoji: '🥜🌿', price: 4 },
+  { id: 'ganacheChoc',     name: 'Chocolate Ganache',  emoji: '🍫🫗', price: 4 },
+  { id: 'ganacheMango',    name: 'Mango Ganache',      emoji: '🥭🫗', price: 4 },
+  { id: 'ganachePistachio',name: 'Pistachio Ganache',  emoji: '🟢🫗', price: 4 },
+  { id: 'ganacheBanana',   name: 'Banana Ganache',     emoji: '🍌🫗', price: 4 },
+  { id: 'ganacheCoffee',   name: 'Coffee Ganache',     emoji: '☕🫗', price: 4 },
 ];
+
+const barBgMap: Record<string, string> = {
+  dark:  '#3d1a0a',
+  milk:  '#8b4a2a',
+  white: '#f5e0b0',
+  ruby: '#b57b88',
+};
 
 export default function CustomChocolateCreator() {
   const [selectedBase, setSelectedBase] = useState<ChocolateBase | null>(null);
@@ -36,221 +86,172 @@ export default function CustomChocolateCreator() {
   const handleIngredientToggle = (ingredient: Ingredient) => {
     setSelectedIngredients(prev => {
       const isSelected = prev.some(ing => ing.id === ingredient.id);
-      
-      if (isSelected) {
-        return prev.filter(ing => ing.id !== ingredient.id);
-      } else {
-        if (prev.length >= 3) {
-          return prev; // Max 3 ingredients
-        }
-        return [...prev, ingredient];
-      }
+      if (isSelected) return prev.filter(ing => ing.id !== ingredient.id);
+      if (prev.length >= 3) return prev;
+      return [...prev, ingredient];
     });
   };
 
-  const totalPrice = (selectedBase?.price || 0) + 
+  const totalPrice =
+    (selectedBase?.price || 0) +
     selectedIngredients.reduce((sum, ing) => sum + ing.price, 0);
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Left Column - Customization */}
-        <div className="space-y-8">
-          {/* Chocolate Base Selection */}
+    <>
+      <style>{`
+   
+      `}</style>
+
+      <div className="cc-wrap">
+        <div className="cc-header">
+          <h1>Build Your Bar</h1>
+          <p>Artisan chocolate, your way</p>
+        </div>
+
+        <div className="cc-grid">
+          {/* ── LEFT COLUMN ── */}
           <div>
-            <h2 className="text-2xl font-bold text-[#5a2a27] mb-6">Choose Your Chocolate Base</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {chocolateBases.map((base) => (
+            <div className="section-label">1 — Choose your base</div>
+            <div className="bases">
+              {chocolateBases.map(base => (
                 <button
                   key={base.id}
+                  className={`base-card${selectedBase?.id === base.id ? ' selected' : ''}`}
                   onClick={() => setSelectedBase(base)}
-                  className={`p-4 rounded-2xl border-2 text-left transition-all duration-300 ${
-                    selectedBase?.id === base.id
-                      ? 'border-[#5a2a27] bg-[#fdfaf5] shadow-lg'
-                      : 'border-[#e8d5c4] bg-white hover:shadow-md'
-                  }`}
                 >
-                  <h3 className="font-bold text-lg text-[#5a2a27] mb-2">
-                    {base.name}
-                  </h3>
-                  <p className="text-[#7a5a53] text-sm mb-3">
-                    {base.description}
-                  </p>
-                  <div className="text-[#5a2a27] font-semibold">
-                    ${base.price}
+                  <div className={`choc-swatch ${base.swatchClass}`}>
+                    <div className="swatch-shimmer" />
+                  </div>
+                  <div className="base-info">
+                    <div className="base-name">{base.name}</div>
+                    <div className="base-desc">
+                      {base.description} · {base.detailDesc}
+                    </div>
+                  </div>
+                  <div className="base-price">${base.price}</div>
+                  <div className="base-check">
+                    <div className="base-check-dot" />
                   </div>
                 </button>
               ))}
             </div>
-          </div>
 
-          {/* Ingredients Selection */}
-          <div>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-[#5a2a27]">Select Your Ingredients</h2>
-              <span className="text-lg text-[#7a5a53]">
-                {selectedIngredients.length} / 3 selected
+            <div className="section-label">
+              2 — Select ingredients&nbsp;
+              <span style={{ fontWeight: 300, textTransform: 'none', letterSpacing: 0 }}>
+                (up to 3)
               </span>
             </div>
-            
-            <div className="grid grid-cols-3 gap-4">
-              {ingredients.map((ingredient) => {
-                const isSelected = selectedIngredients.some(ing => ing.id === ingredient.id);
-                const isDisabled = !isSelected && selectedIngredients.length >= 3;
+            <div className="ing-counter">
+              Selected: <span>{selectedIngredients.length}</span> / 3
+            </div>
 
+            <div className="ingredients-grid">
+              {ingredients.map(ingredient => {
+                const isSelected = selectedIngredients.some(i => i.id === ingredient.id);
+                const isDisabled = !isSelected && selectedIngredients.length >= 3;
                 return (
                   <button
                     key={ingredient.id}
+                    className={`ing-btn${isSelected ? ' ing-selected' : ''}`}
                     onClick={() => handleIngredientToggle(ingredient)}
                     disabled={isDisabled}
-                    className={`flex flex-col items-center p-4 rounded-2xl border-2 transition-all duration-200 ${
-                      isSelected
-                        ? 'border-[#5a2a27] bg-[#fdfaf5]'
-                        : isDisabled
-                        ? 'border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed'
-                        : 'border-[#e8d5c4] bg-white hover:border-[#5a2a27]'
-                    }`}
                   >
-                    <div className="w-16 h-16 mb-3 flex items-center justify-center">
-                      <img
-                        src={ingredient.image}
-                        alt={ingredient.name}
-                        className="w-full h-full object-contain"
-                      />
+                    <div className="ing-tick">
+                      <div className="ing-tick-inner" />
                     </div>
-                    <span className="font-medium text-[#5a2a27] text-sm text-center mb-1">
-                      {ingredient.name}
-                    </span>
-                    <span className="text-xs text-[#7a5a53]">
-                      +${ingredient.price}
-                    </span>
-                    {isSelected && (
-                      <div className="mt-2 w-4 h-4 bg-[#5a2a27] rounded-full flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full" />
-                      </div>
-                    )}
+                    <div className="ing-icon">{ingredient.emoji}</div>
+                    <div className="ing-name">{ingredient.name}</div>
+                    <div className="ing-price">+${ingredient.price}</div>
                   </button>
                 );
               })}
             </div>
           </div>
-        </div>
 
-        {/* Right Column - Preview & Summary */}
-        <div className="space-y-6">
-          {/* Product Preview */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-[#e8d5c4]">
-            <h2 className="text-2xl font-bold text-[#5a2a27] mb-6 text-center">
-              Your Custom Chocolate Bar
-            </h2>
-            
-            <div className="flex flex-col items-center mb-6">
-              <div className="w-48 h-48 bg-gradient-to-br from-[#f0e6d6] to-[#e8d5c4] rounded-2xl flex items-center justify-center mb-4 relative">
-                <div className="text-4xl">🍫</div>
-                
-                {/* Display selected ingredients as small icons on the chocolate */}
-                {selectedIngredients.length > 0 && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {selectedIngredients.map((ingredient, index) => (
-                        <div
-                          key={ingredient.id}
-                          className="w-8 h-8 bg-white rounded-full p-1 shadow-sm"
-                          style={{
-                            position: 'absolute',
-                            top: `${20 + (index * 25)}%`,
-                            left: `${30 + (index * 20)}%`,
-                          }}
-                        >
-                          <img
-                            src={ingredient.image}
-                            alt={ingredient.name}
-                            className="w-full h-full object-contain"
-                          />
+          {/* ── RIGHT COLUMN ── */}
+          <div className="right-panel">
+            {/* Bar preview */}
+            <div className="bar-preview">
+              <div className="bar-visual-wrap">
+                <div
+                  className={`bar-visual${!selectedBase ? ' bar-empty' : ''}`}
+                  style={selectedBase ? { backgroundColor: barBgMap[selectedBase.id] } : {}}
+                >
+                  {/* Topping bubbles */}
+                  {selectedIngredients.length > 0 && (
+                    <div className="bar-toppings">
+                      {selectedIngredients.map(ing => (
+                        <div key={ing.id} className="topping-bubble">
+                          {ing.emoji}
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
-              
-              <h3 className="text-xl font-bold text-[#5a2a27] mb-2">
-                {selectedBase ? `${selectedBase.name} Bar` : 'Custom Chocolate Bar'}
-              </h3>
-              
-              {selectedBase && (
-                <p className="text-[#7a5a53] text-sm text-center">
-                  {selectedBase.description}
-                </p>
-              )}
-            </div>
+                  )}
 
-            {/* Selected Items */}
-            <div className="space-y-4">
-              {selectedBase && (
-                <div className="flex justify-between items-center p-3 bg-[#fdfaf5] rounded-lg">
-                  <div>
-                    <div className="font-medium text-[#5a2a27]">{selectedBase.name}</div>
-                    <div className="text-sm text-[#7a5a53]">{selectedBase.description}</div>
-                  </div>
-                  <div className="text-[#5a2a27] font-semibold">${selectedBase.price}</div>
-                </div>
-              )}
-              
-              {selectedIngredients.map(ingredient => (
-                <div key={ingredient.id} className="flex justify-between items-center p-3 bg-[#fdfaf5] rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8">
-                      <img
-                        src={ingredient.image}
-                        alt={ingredient.name}
-                        className="w-full h-full object-contain"
-                      />
+                  {/* Segment grid */}
+                  {selectedBase && (
+                    <div className="bar-segs">
+                      {Array.from({ length: 6 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className={`bar-seg${selectedBase.id === 'white' ? ' bar-seg-white' : ''}`}
+                        />
+                      ))}
                     </div>
-                    <span className="font-medium text-[#5a2a27]">{ingredient.name}</span>
-                  </div>
-                  <div className="text-[#5a2a27] font-semibold">+${ingredient.price}</div>
+                  )}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          {/* Order Summary & Add to Cart */}
-          <div className="bg-[#fdfaf5] rounded-2xl p-6 border border-[#e8d5c4]">
-            <h3 className="font-semibold text-[#5a2a27] mb-4 text-lg">Order Summary</h3>
-            
-            <div className="space-y-3 mb-6">
-              {selectedBase && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-[#7a5a53]">Chocolate Base</span>
-                  <span className="text-[#5a2a27]">${selectedBase.price}</span>
-                </div>
-              )}
-              
-              {selectedIngredients.map(ingredient => (
-                <div key={ingredient.id} className="flex justify-between text-sm">
-                  <span className="text-[#7a5a53]">+ {ingredient.name}</span>
-                  <span className="text-[#5a2a27]">${ingredient.price}</span>
-                </div>
-              ))}
-              
-              <div className="border-t border-[#e8d5c4] pt-3 mt-3">
-                <div className="flex justify-between font-semibold text-lg">
-                  <span className="text-[#5a2a27]">Total</span>
-                  <span className="text-[#5a2a27]">${totalPrice}</span>
-                </div>
+              <div className="bar-label">
+                {selectedBase ? `${selectedBase.name} Bar` : 'Your Bar'}
+              </div>
+              <div className="bar-sublabel">
+                {selectedBase
+                  ? `${selectedBase.description} · ${selectedBase.detailDesc}`
+                  : 'Select a base to begin'}
               </div>
             </div>
 
-            <button 
-              disabled={!selectedBase}
-              className="w-full bg-[#5a2a27] text-white py-4 rounded-lg hover:bg-[#6a3a37] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-semibold text-lg"
-            >
-              {selectedBase ? `Add to Cart - $${totalPrice}` : 'Select a Chocolate Base'}
+            {/* Summary */}
+            <div className="summary-card">
+              <div className="section-label" style={{ marginBottom: 10 }}>
+                Order summary
+              </div>
+
+              {!selectedBase && selectedIngredients.length === 0 ? (
+                <div className="empty-hint">Nothing selected yet</div>
+              ) : (
+                <div>
+                  {selectedBase && (
+                    <div className="summary-row">
+                      <span className="summary-row-label">Base — {selectedBase.name}</span>
+                      <span className="summary-row-price">${selectedBase.price}</span>
+                    </div>
+                  )}
+                  {selectedIngredients.map(ing => (
+                    <div key={ing.id} className="summary-row">
+                      <span className="summary-row-label">
+                        {ing.emoji} {ing.name}
+                      </span>
+                      <span className="summary-row-price">+${ing.price}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="summary-total">
+                <span className="summary-total-label">Total</span>
+                <span className="summary-total-price">${totalPrice}</span>
+              </div>
+            </div>
+
+            <button className="add-btn" disabled={!selectedBase}>
+              {selectedBase ? `Add to Cart — $${totalPrice}` : 'Select a chocolate base first'}
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

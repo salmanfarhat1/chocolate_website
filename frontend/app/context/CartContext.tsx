@@ -24,7 +24,7 @@ type Cart = {
 
 type CartContextType = {
   cart: Cart;
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -53,7 +53,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('chocolate-cart', JSON.stringify(cart));
   }, [cart]);
 
-  const addItem = (item: Omit<CartItem, 'quantity'>) => {
+  const addItem = (item: CartItem) => {
     setCart(prevCart => {
       const existingItem = prevCart.items.find(cartItem => cartItem.id === item.id);
       
@@ -62,12 +62,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         // Update quantity if item exists
         newItems = prevCart.items.map(cartItem =>
           cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
             : cartItem
         );
       } else {
         // Add new item
-        newItems = [...prevCart.items, { ...item, quantity: 1 }];
+        newItems = [...prevCart.items, { ...item }];
       }
 
       const total = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);

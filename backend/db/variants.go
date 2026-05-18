@@ -32,3 +32,18 @@ func GetVariants(db *sql.DB) ([]models.Variants, error) {
 	}
 	return variants, nil
 }
+func UpdateVariant(db *sql.DB, id int, variant *models.Variants) error {
+	query := `
+		UPDATE chocolate_variants
+		SET chocolate_id = $1, size = $2, weight = $3, price = $4
+		WHERE id = $5
+	`
+	_, err := db.Exec(query,
+		variant.ChocolateID,
+		variant.Size,
+		variant.Weight,
+		variant.Price,
+		id,
+	)
+	return err
+}

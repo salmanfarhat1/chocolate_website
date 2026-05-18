@@ -16,8 +16,8 @@ export default function CartPage() {
             <div className="text-6xl mb-4">🛒</div>
             <h1 className="text-3xl font-bold text-[#5a2a27] mb-4">Your Cart is Empty</h1>
             <p className="text-[#7a5a53] mb-8">Add some delicious chocolates to your cart!</p>
-            <a 
-              href="/chocolates"
+            <a
+              href="/"
               className="inline-block bg-[#5a2a27] text-white px-8 py-3 rounded-lg hover:bg-[#6a3a37] transition-colors"
             >
               Browse Collections
@@ -43,6 +43,13 @@ export default function CartPage() {
                 <div key={item.id} className="bg-white rounded-2xl p-6 shadow-lg border border-[#e8d5c4]">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-20 h-20 object-cover rounded-xl mr-4 flex-shrink-0"
+                      />
+                    )}
                       <h3 className="font-bold text-lg text-[#5a2a27] mb-2">{item.name}</h3>
                       {item.customDetails && (
                         <div className="text-sm text-[#7a5a53] mb-2">
