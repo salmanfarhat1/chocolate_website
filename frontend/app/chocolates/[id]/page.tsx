@@ -1,8 +1,10 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import VariantSelector from "../../components/VariantSelector";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
+import VariantSelector from "@/app/components/VariantSelector";
 
-const API = "http://localhost:3000";
+export const dynamic = 'force-dynamic';
+
+const API = process.env.NEXT_PUBLIC_API_URL || "";
 
 type Chocolate = {
   id: number;
@@ -23,8 +25,10 @@ async function getChocolate(id: string): Promise<Chocolate | null> {
   try {
     const res = await fetch(`${API}/chocolates`, { cache: "no-store" });
     const all: Chocolate[] = await res.json();
-    return all.find(c => String(c.id) === id) ?? null;
-  } catch { return null; }
+    return all.find((c) => String(c.id) === id) ?? null;
+  } catch {
+    return null;
+  }
 }
 
 async function getVariants(id: string): Promise<Variant[]> {
@@ -32,17 +36,20 @@ async function getVariants(id: string): Promise<Variant[]> {
     const res = await fetch(`${API}/chocolates/${id}/variants`, { cache: "no-store" });
     const data = await res.json();
     return Array.isArray(data) ? data : [];
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 
-export default async function ChocolateDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function ChocolateDetailPage({ params }: Props) {
+  const { id } = await params;
   const [chocolate, variants] = await Promise.all([
-    getChocolate(params.id),
-    getVariants(params.id),
+    getChocolate(id),
+    getVariants(id),
   ]);
 
   if (!chocolate) {
@@ -52,7 +59,7 @@ export default async function ChocolateDetailPage({
         <div className="flex flex-col items-center justify-center py-32">
           <div className="text-6xl mb-4">🍫</div>
           <h1 className="text-2xl font-semibold text-[#5a2a27] mb-2">Product not found</h1>
-          <a href="/chocolates" className="text-[#8b7355] underline mt-4">← Back to collection</a>
+          <a href="/" className="text-[#8b7355] underline mt-4">← Back to collection</a>
         </div>
         <Footer />
       </div>
@@ -64,72 +71,26 @@ export default async function ChocolateDetailPage({
   return (
     <div className="min-h-screen bg-[#fdfaf5]">
       <Header />
-
       <main className="max-w-6xl mx-auto px-6 py-12">
-
-        {/* Breadcrumb */}
-        <div className="text-sm text-[#8b7355] mb-8">
-          <a href="/" className="hover:text-[#5a2a27]">Home</a>
-          <span className="mx-2">›</span>
-          <a href="/chocolates" className="hover:text-[#5a2a27]">Collection</a>
-          <span className="mx-2">›</span>
-          <span className="text-[#5a2a27]">{chocolate.name}</span>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-
-          {/* Photo gallery */}
+          {/* Images */}
           <div>
             <div className="rounded-2xl overflow-hidden bg-[#f0e6d6] aspect-square">
               {photos[0] ? (
-                <img
-                  src={`${API}${photos[0]}`}
-                  alt={chocolate.name}
-                  className="w-full h-full object-cover"
-                  id="main-photo"
-                />
+                <img src={`${API}${photos[0]}`} alt={chocolate.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-7xl">🍫</div>
               )}
             </div>
-
-            {/* Thumbnails */}
-            {photos.length > 1 && (
-              <div className="flex gap-3 mt-4 flex-wrap">
-                {photos.map((p, i) => (
-                  <img
-                    key={i}
-                    src={`${API}${p}`}
-                    alt={`photo ${i + 1}`}
-                    className="w-20 h-20 object-cover rounded-lg border-2 border-transparent hover:border-[#5a2a27] cursor-pointer transition-all"
-                  />
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Info + variants */}
+          {/* Info */}
           <div>
-            <div className="text-sm font-medium text-[#8b7355] uppercase tracking-widest mb-2">
-              Artisanal · Handcrafted
-            </div>
-            <h1 className="text-4xl font-light text-[#5a2a27] mb-6" style={{ fontFamily: 'Georgia, serif' }}>
-              {chocolate.name}
-            </h1>
-
+            <h1 className="text-4xl font-light text-[#5a2a27] mb-6">{chocolate.name}</h1>
             {chocolate.ingredients && (
-              <div className="mb-8">
-                <div className="text-xs uppercase tracking-widest text-[#8b7355] mb-2">Ingredients</div>
-                <p className="text-[#7a5a53] leading-relaxed">{chocolate.ingredients}</p>
-              </div>
+              <p className="text-[#7a5a53] leading-relaxed mb-8">{chocolate.ingredients}</p>
             )}
-
             <div className="border-t border-[#f0e6d6] pt-8">
-              <div className="text-xs uppercase tracking-widest text-[#8b7355] mb-4">
-                {variants.length ? 'Choose your size' : 'Availability'}
-              </div>
-
-              {/* Client component handles selection + add to cart */}
               <VariantSelector
                 chocolateId={chocolate.id}
                 chocolateName={chocolate.name}
@@ -140,7 +101,6 @@ export default async function ChocolateDetailPage({
           </div>
         </div>
       </main>
-
       <Footer />
     </div>
   );
